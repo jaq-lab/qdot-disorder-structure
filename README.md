@@ -111,6 +111,7 @@ The `scripts/Definitions.py` file contains essential functions for:
 
 ### Example Usage
 
+#### Basic Analysis
 ```python
 from scripts.Definitions import load_data, plot_sweep, get_Eav_tc_eps0
 import numpy as np
@@ -127,6 +128,112 @@ E_avg, tc, eps0 = get_Eav_tc_eps0(detuning, energy)
 
 # Plot results
 plot_sweep(plt.gca(), detuning, energy[:, 0], "Energy vs Detuning")
+```
+
+#### Digital Twin Generation
+Generate artificial quantum dot devices using the learned covariance structure:
+
+```python
+import numpy as np
+import pandas as pd
+from scipy.stats import multivariate_normal
+
+def generate_digital_twin(cov_matrix_file, n_samples=1000, seed=42):
+    """
+    Generate artificial quantum dot devices using multivariate Gaussian distribution.
+    
+    Parameters:
+    -----------
+    cov_matrix_file : str
+        Path to covariance matrix file (e.g., 'data/cov_matrix_raw_1e10.npy')
+    n_samples : int
+        Number of artificial devices to generate
+    seed : int
+        Random seed for reproducibility
+    
+    Returns:
+    --------
+    artificial_data : pandas.DataFrame
+        Generated quantum dot parameters for n_samples devices
+    """
+    # Load covariance matrix and mean values
+    cov_data = np.load(cov_matrix_file, allow_pickle=True)
+    
+    # Extract covariance matrix and mean values
+    if isinstance(cov_data, pd.DataFrame):
+        cov_matrix = cov_data.cov().values
+        mean_values = cov_data.mean().values
+        parameter_names = cov_data.columns.tolist()
+    else:
+        # If raw numpy array, assume it contains both mean and covariance
+        cov_matrix = cov_data
+        mean_values = np.zeros(cov_matrix.shape[0])  # Assume zero mean
+    
+    # Set random seed for reproducibility
+    np.random.seed(seed)
+    
+    # Generate samples from multivariate normal distribution
+    artificial_samples = multivariate_normal.rvs(
+        mean=mean_values, 
+        cov=cov_matrix, 
+        size=n_samples
+    )
+    
+    # Convert to DataFrame
+    artificial_data = pd.DataFrame(artificial_samples, columns=parameter_names)
+    
+    return artificial_data
+
+# Example usage:
+# Generate 1000 artificial devices using the 1e10 charge density model
+artificial_devices = generate_digital_twin('data/cov_matrix_raw_1e10.npy', n_samples=1000)
+
+# Generate devices using PCA-reduced model
+pca_devices = generate_digital_twin('data/cov_matrix_pca_1e10.npy', n_samples=1000)
+
+# Compare artificial vs real data
+print("Artificial device parameters:")
+print(artificial_devices.describe())
+```
+
+#### Advanced Digital Twin with Custom Parameters
+```python
+def generate_custom_digital_twin(cov_matrix_file, target_params=None, n_samples=1000):
+    """
+    Generate digital twins with specific parameter constraints.
+    
+    Parameters:
+    -----------
+    cov_matrix_file : str
+        Path to covariance matrix file
+    target_params : dict
+        Dictionary of parameter names and target values
+    n_samples : int
+        Number of devices to generate
+    """
+    # Load base covariance structure
+    cov_data = np.load(cov_matrix_file, allow_pickle=True)
+    cov_matrix = cov_data.cov().values if isinstance(cov_data, pd.DataFrame) else cov_data
+    mean_values = cov_data.mean().values if isinstance(cov_data, pd.DataFrame) else np.zeros(cov_matrix.shape[0])
+    
+    # Generate base samples
+    samples = multivariate_normal.rvs(mean=mean_values, cov=cov_matrix, size=n_samples)
+    
+    # Apply constraints if specified
+    if target_params:
+        for param, target_value in target_params.items():
+            if param in cov_data.columns:
+                param_idx = cov_data.columns.get_loc(param)
+                samples[:, param_idx] = target_value
+    
+    return pd.DataFrame(samples, columns=cov_data.columns)
+
+# Example: Generate devices with specific tunnel coupling
+constrained_devices = generate_custom_digital_twin(
+    'data/cov_matrix_raw_1e10.npy',
+    target_params={'tcs': 20.0},  # Target tunnel coupling of 20 μeV
+    n_samples=500
+)
 ```
 
 ## 🎓 Citation
