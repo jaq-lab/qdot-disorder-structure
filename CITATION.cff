@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Samadi"
+    given-names: "Saeed"
+    affiliation: "Institute of Physics, Polish Academy of Sciences"
+  - family-names: "Cywiński"
+    given-names: "Łukasz"
+    affiliation: "Institute of Physics, Polish Academy of Sciences"
+  - family-names: "Krzywda"
+    given-names: "Jan A."
+    affiliation: "Leiden University, Applied Quantum Algorithms"
+title: "Statistical Structure of Charge Disorder in Si/SiGe Quantum Dots"
+version: 1.0.0
+date-released: 2024-10-17
+url: "https://github.com/jaq-lab/qdot-disorder-structure"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Samadi"
+      given-names: "Saeed"
+    - family-names: "Cywiński"
+      given-names: "Łukasz"
+    - family-names: "Krzywda"
+      given-names: "Jan A."
+  title: "Statistical Structure of Charge Disorder in Si/SiGe Quantum Dots"
+  journal: "arXiv preprint"
+  year: 2024
+  identifiers:
+    - type: arxiv
+      value: "2510.13578"
+      description: "arXiv preprint"
+keywords:
+  - quantum dots
+  - spin qubits
+  - disorder
+  - principal component analysis
+  - silicon quantum computing
+license: MIT
