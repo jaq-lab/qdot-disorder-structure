@@ -241,11 +241,11 @@ constrained_devices = generate_custom_digital_twin(
 If you use this code or data in your research, please cite our paper:
 
 ```bibtex
-@article{samadi2024statistical,
+@article{samadi2025statistical,
   title={Statistical Structure of Charge Disorder in Si/SiGe Quantum Dots},
   author={Samadi, Saeed and Cywi{\'n}ski, {\L}ukasz and Krzywda, Jan A},
   journal={arXiv preprint arXiv:2510.13578},
-  year={2024}
+  year={2025}
 }
 ```
 
@@ -272,7 +272,7 @@ This work was supported by research funding from the Polish Academy of Sciences 
 ## 🔗 Related Links
 
 - [arXiv Paper](https://arxiv.org/abs/2510.13578)
-- [Author Blog Post](https://jan-a-krzywda.com/our-paper-statistical-structure-of-charge-disorder-in-si-sige-quantum-dots/)
+- [Blog Post](https://jan-a-krzywda.com/our-paper-statistical-structure-of-charge-disorder-in-si-sige-quantum-dots/)
 - [GitHub Repository](https://github.com/jaq-lab/qdot-disorder-structure)
 
 ---
